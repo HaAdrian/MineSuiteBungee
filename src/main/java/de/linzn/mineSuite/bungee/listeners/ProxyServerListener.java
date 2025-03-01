@@ -18,6 +18,7 @@ import de.linzn.mineSuite.bungee.database.mysql.BungeeQuery;
 import de.linzn.mineSuite.bungee.module.ban.BanManager;
 import de.linzn.mineSuite.bungee.module.core.BungeeManager;
 import de.linzn.mineSuite.bungee.module.core.socket.JServerBungeeOutput;
+import de.linzn.mineSuite.bungee.module.economy.EconomyManager;
 import de.linzn.mineSuite.bungee.utils.MessageDB;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ProxyServer;
@@ -70,7 +71,7 @@ public class ProxyServerListener implements Listener {
     public void onLogin(final LoginEvent e) {
         if (!isProtocolAllowed(e.getConnection().getVersion())) {
             e.setCancelled(true);
-            e.setCancelReason("Deine Minecraft Version wird nicht unterstützt. Bitte benutze Version " + Config.getString("login.recommendedVersion"));
+            e.setReason(TextComponent.fromLegacy("Deine Minecraft Version wird nicht unterstützt. Bitte benutze Version " + Config.getString("login.recommendedVersion")));
             MineSuiteBungeePlugin.getInstance().getLogger()
                     .info("Connection " + e.getConnection().getName() + " is using wrong protocol version: " + e.getConnection().getVersion());
 
@@ -80,14 +81,14 @@ public class ProxyServerListener implements Listener {
         }
 
         if (BanManager.isBanned(e.getConnection().getUniqueId())) {
-            final Long current = System.currentTimeMillis();
-            final Long end = BanManager.getEnd(e.getConnection().getUniqueId());
+            final long current = System.currentTimeMillis();
+            final long end = BanManager.getEnd(e.getConnection().getUniqueId());
             if (end < current && end != -1L) {
                 e.setCancelled(false);
                 BanManager.unBanSystem(e.getConnection().getUniqueId());
             } else {
                 e.setCancelled(true);
-                e.setCancelReason(BanManager.getBannedMessage(e.getConnection().getUniqueId()));
+                e.setReason(TextComponent.fromLegacy(BanManager.getBannedMessage(e.getConnection().getUniqueId())));
             }
         }
 
@@ -100,7 +101,6 @@ public class ProxyServerListener implements Listener {
             MineSuiteBungeePlugin.getInstance().getLogger().info(
                     "FAIL! UUID-cache update for incoming connection " + e.getConnection().getName() + " failed! Address: " + ip);
         }
-
     }
 
     @SuppressWarnings("deprecation")
