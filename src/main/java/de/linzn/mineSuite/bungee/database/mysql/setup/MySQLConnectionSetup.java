@@ -60,6 +60,7 @@ public class MySQLConnectionSetup {
             String guild_module_2 = "CREATE TABLE guild_home (guild_uuid varchar(60) NOT NULL, server varchar(255) NOT NULL, world varchar(255) NOT NULL, x varchar(255) NOT NULL, y varchar(255) NOT NULL, z varchar(255) NOT NULL, yaw varchar(255) NOT NULL, pitch varchar(255) NOT NULL, PRIMARY KEY (`guild_uuid`));";
             String guild_module_3 = "CREATE TABLE guild_object (id int(11) NOT NULL AUTO_INCREMENT, guild_uuid varchar(60) NOT NULL, guild_name varchar(255) NOT NULL, guild_level int(11) DEFAULT NULL, guild_experience varchar(255) DEFAULT NULL, PRIMARY KEY (`id`,`guild_uuid`));";
             String guild_module_4 = "CREATE TABLE guild_rang_permission (fake_id int(11) NOT NULL AUTO_INCREMENT, rang_uuid varchar(255) NOT NULL, permission varchar(255) NOT NULL, PRIMARY KEY (`fake_id`));";
+            String guild_module_5 = "CREATE TABLE guild_rang (id int(11) NOT NULL AUTO_INCREMENT, rang_uuid varchar(60) NOT NULL, guild_uuid varchar(255) NOT NULL, rang_name varchar(255) NOT NULL, rang_priority int(11) NOT NULL, rang_fixed tinyint(1) NOT NULL, PRIMARY KEY (`id`,`rang_uuid`));";
 
             Statement action = connection.createStatement();
             action.executeUpdate(core);
@@ -75,6 +76,7 @@ public class MySQLConnectionSetup {
             action.executeUpdate(guild_module_2);
             action.executeUpdate(guild_module_3);
             action.executeUpdate(guild_module_4);
+            action.executeUpdate(guild_module_5);
             action.close();
             handler.release(connection);
 
